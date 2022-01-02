@@ -40,7 +40,11 @@ colors = {
       
       <View style={styles.container}>
         <ImageBackground source={image} resizeMode='cover' style={styles.image}>
-          <View>
+          <View 
+                accessible={false}
+                accessibilityLabel="Chattry Messaging App"
+                accessibilityHint="The title of the app"
+                accessibilityRole="header">
             <Text style={styles.title}>Chat App</Text>    
           </View>
           {/* end chat app title view */}
@@ -49,7 +53,11 @@ colors = {
           <View style={styles.inputbox}>
 
           <Image source={icon} style={styles.userIcon}/>
-       <TextInput
+       <TextInput 
+                accessible={true}
+                accessibilityLabel="Type your name here"
+                accessibilityHint="Lets you enter your name"
+                accessibilityRole="search"
          style={styles.input}
          onChangeText={(text) => this.setState({name: text})}
          value={this.state.name}
@@ -67,6 +75,10 @@ colors = {
 
 <View style={styles.colorPalette}>
     <TouchableOpacity
+                accessible={true}
+                accessibilityLabel="Black as background"
+                accessibilityHint="Settting color Black as chat background"
+                accessibilityRole="combobox"
       onPress={() =>{ this.changeBgColor(this.colors.black)}}
     style={ styles.colorSelection}
     >
@@ -75,6 +87,10 @@ colors = {
     </TouchableOpacity>
 
     <TouchableOpacity
+                accessible={true}
+                accessibilityLabel="Independence Purple as background"
+                accessibilityHint="Settting color Independence Purple as chat background"
+                accessibilityRole="combobox"
        onPress={() =>{ this.changeBgColor(this.colors.independence)}}
     style={ styles.colorSelection}
     >
@@ -83,6 +99,10 @@ colors = {
     </TouchableOpacity>
 
     <TouchableOpacity
+                accessible={true}
+                accessibilityLabel="Dusk Gray as background"
+                accessibilityHint="Settting color Dusk Gray as chat background"
+                accessibilityRole="combobox"
       onPress={() =>{ this.changeBgColor(this.colors.duskGray)}}
     style={ styles.colorSelection}
     >
@@ -90,7 +110,11 @@ colors = {
         </View>
     </TouchableOpacity>
 
-    <TouchableOpacity                 
+    <TouchableOpacity
+                accessible={true}
+                accessibilityLabel="Composed Green as background"
+                accessibilityHint="Settting color Composed Green as chat background"
+                accessibilityRole="combobox"                  
     onPress={() =>{ this.changeBgColor(this.colors.composedGreen)}}
     style={ styles.colorSelection}
     >
@@ -104,6 +128,10 @@ colors = {
     {/* end of styles color box view */}
 
         <Pressable
+                accessible={true}
+                accessibilityLabel="Start Chat"
+                accessibilityHint="Navigate to the chat page"
+                accessibilityRole="button"
           style={styles.button}  
           onPress={() => this.props.navigation.navigate('Chat', { 
             name: this.state.name, 

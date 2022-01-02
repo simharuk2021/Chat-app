@@ -1,8 +1,7 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { Component } from 'react';
 //imports the screen components
-import Start from'./components/Start';
 import Chat from'./components/Chat';
+import Start from'./components/Start';
 // import react native gesture handler
 import 'react-native-gesture-handler';
 // import react Navigation
@@ -13,7 +12,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 const Stack = createStackNavigator();
 
 //The main app which imports and then links the start and chat components
-export default function App() {
+export default class App extends React.Component{
+  render() {
   return (
     <NavigationContainer>
       <Stack.Navigator
@@ -29,14 +29,6 @@ export default function App() {
         />
       </Stack.Navigator>
     </NavigationContainer>
-  );
+   );
+  }
 }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: '#fff',
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//   },
-// });

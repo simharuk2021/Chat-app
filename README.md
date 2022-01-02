@@ -93,6 +93,7 @@
 ### Built With
 
 * [ReactNative.js](https://reactnative.dev/)
+* [ReactNative-Gifted Chat](https://github.com/FaridSafi/react-native-gifted-chat)
 
 
 <p align="right">(<a href="#top">back to top</a>)</p>
@@ -115,6 +116,7 @@ To install expo
 1. `npm install --save react-navigation`
 2. `npm install @react-navigation/native @react-navigation/stack`
 3. `expo install react-native-reanimated react-native-gesture-handler react-native-screens react-native-safe-area-context @react-native-community/masked-view`
+4. `npm install react-native-gifted-chat --save`
    
 
 <p align="right">(<a href="#top">back to top</a>)</p>
