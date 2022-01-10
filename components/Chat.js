@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet} from 'react-native';
 import { GiftedChat,Bubble } from 'react-native-gifted-chat';
 import { Platform, KeyboardAvoidingView } from 'react-native';
+import { initializeApp } from "firebase/app";
 import * as firebase from 'firebase';
 import "firebase/firestore";
 
@@ -43,7 +44,7 @@ export default class Chat extends React.Component {
     const name = this.props.route.params.name;
 
    //user authentication
-  this.authUnsubscribe = firebase.auth().onAuthStateChanged(async (user) => {
+  this.authUnsubscribe = firebase.auth().onAuthStateChanged((user) => {
     if (!user) {
 
     //user can sign in as anonymous
