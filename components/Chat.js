@@ -2,8 +2,8 @@ import React from 'react';
 import { View, Text, StyleSheet} from 'react-native';
 import { GiftedChat,Bubble } from 'react-native-gifted-chat';
 import { Platform, KeyboardAvoidingView } from 'react-native';
-const firebase = require('firebase');
-require('firebase/firestore');
+import * as firebase from 'firebase';
+import "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCbjzfg0sF5c62vHzPxPIP9xv1WXSwZ5KQ",
