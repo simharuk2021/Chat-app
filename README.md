@@ -109,7 +109,7 @@ The project has been developed with expo and currently requires `expo start` to 
 
 To install expo 
 `npm install expo-cli --global`
-
+`expo init`
 
 ### Installation
 
