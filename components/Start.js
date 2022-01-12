@@ -13,6 +13,7 @@ import {
 
 const image = require('../project_assets/Background_image.png');
 const icon = require('../project_assets/icon.svg');
+import Icon from 'react-native-vector-icons/FontAwesome';
 export default class Start extends React.Component {
 
   constructor(props) {
@@ -50,9 +51,13 @@ colors = {
           {/* end chat app title view */}
 
           <View style={styles.box}>
-          <View style={styles.inputbox}>
-
-          <Image source={icon} style={styles.userIcon}/>
+          <View style={styles.inputBox}>
+          <Icon
+                  style={styles.icon}
+                  name="user"
+                  size={30}
+                  color="#888"
+                />
        <TextInput 
                 accessible={true}
                 accessibilityLabel="Type your name here"
@@ -151,137 +156,143 @@ const styles = StyleSheet.create({
   container: {
       flex: 1,
   },
-  box: {
-    marginBottom: 30,
-    backgroundColor: "white",
-    flexGrow: 1,
-    flexShrink: 0,
-    flexDirection: "column",
-    justifyContent: "space-evenly",
-    alignItems: "center",
-    paddingTop: 15,
-    paddingBottom: 15,
-    borderRadius: 10,
-    height: 260,
-    minHeight: 260,
-    maxHeight: 300,
-    height: "44%",
-    width: "88%"
-},
 
-image: {
-  flex: 1,
-  flexDirection: 'column',
-  justifyContent: 'center',
-  alignItems: 'center',
-},
+    image: {
+      flex: 1,
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
 
-inputbox: {
-    marginBottom: 30,
-    backgroundColor: "white",
-    flexGrow: 1,
-    flexShrink: 0,
-    flexDirection: "column",
-    justifyContent: "space-evenly",
-    alignItems: "center",
-    paddingTop: 15,
-    paddingBottom: 15,
-    borderRadius: 10,
-    height: 100,
-    minHeight: 100,
-    maxHeight: 300,
-    height: "22%",
-    width: "44%"
-},
+    title: {
+      fontSize: 45,
+      fontWeight: "bold",
+      color: 'white',
+      textAlign: "center",
+      padding: 20
+    },
+    
+    titleBox:{
+      width: "60%",
+      height: "auto",
+      alignItems: "center",
+      marginTop: 50,
+      resizeMode: "contain",
+      flex: 1,
+   },
+    box: {
+      height: "44%",
+      width: "88%",
+      marginBottom: 30,
+      backgroundColor: "white",
+      flexGrow: 1,
+      flexShrink: 0,
+      flexDirection: "column",
+      justifyContent: "space-evenly",
+      alignItems: "center",
+      paddingTop: 15,
+      paddingBottom: 15,
+      borderRadius: 10,
+      height: 100,
+      minHeight: 260,
+      maxHeight: 300,
+  },
 
-title: {
-  fontSize: 45,
-  fontWeight: "bold",
-  color: 'white',
-  textAlign: "center",
-  padding: 20
-},
+    inputBox: {
+      flexDirection: 'row',
+      width:"88%",
+      height: 50,
+      borderColor: '#757083', 
+      borderWidth: 1,
+      padding: 10
+    },
 
-input: {
-  fontSize: 15,
-  fontWeight: "300",
-  color: '#757083',
-  opacity: 1
-},
+    icon: {
+      marginRight:15,
+      height: 25,
+      width: 25,
+    },
 
-colorBox:{
-  flexDirection: 'column',
-  padding: 20,
-  width: "88%"
-},
+    input: {
+      fontSize: 16,
+      fontWeight: "300",
+      color: '#757083',
+      opacity: 0.5
+    },
 
-colorPalette: {
-  flexDirection: 'row',
-  justifyContent: 'space-between',
-  padding: 5,
-},
+    colorBox:{
+      flexDirection: 'column',
+      padding: 20,
+      width: "88%"
+    },
 
-colorSelection:{
+    colorPalette: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      padding: 5,
+    },
 
-  alignSelf: 'center',
-  borderRadius: 40,
-  borderWidth: 2,
-  borderColor: 'white'
-},
+    colorSelection:{
 
-colorText:{
-  fontSize: 16,
-  fontWeight: "300",
-  color: 'white',
-  opacity: 1,
-  padding: 5,
-},
+      alignSelf: 'center',
+      borderRadius: 40,
+      borderWidth: 2,
+      borderColor: 'white'
+    },
 
-color1:{
-  flexDirection: 'row',
-  backgroundColor: '#090C08',
-  width: 40,
-  height: 40,
-  borderRadius: 20,
-  margin: 2,
-},
-color2:{
-  flexDirection: 'row',
-  backgroundColor: '#474056',
-  width: 40,
-  height: 40,
-  borderRadius: 20,
-  margin: 2
-},
-color3:{
-  flexDirection: 'row',
-  backgroundColor: '#8A95A5',
-  width: 40,
-  height: 40,
-  borderRadius: 20,
-  margin: 2
-},
-color4:{
-  flexDirection: 'row',
-  backgroundColor: '#B9C6AE',
-  width: 40,
-  height: 40,
-  borderRadius: 20,
-  margin: 2
-},
-button: {
-  flexDirection: 'column',
-  backgroundColor: "#757083", 
-  width: "88%",
-  borderRadius: 10,
-},
+    colorText:{
+      fontSize: 16,
+      fontWeight: "300",
+      color: 'white',
+      opacity: 1,
+      padding: 5,
+    },
 
-buttontext: {
-  fontSize: 16,
-  fontWeight: "bold",
-  color: 'white',
-  textAlign: "center",
-  padding: 20
-}
+    color1:{
+      flexDirection: 'row',
+      backgroundColor: '#090C08',
+      width: 40,
+      height: 40,
+      borderRadius: 20,
+      margin: 2,
+    },
+    color2:{
+      flexDirection: 'row',
+      backgroundColor: '#474056',
+      width: 40,
+      height: 40,
+      borderRadius: 20,
+      margin: 2
+    },
+    color3:{
+      flexDirection: 'row',
+      backgroundColor: '#8A95A5',
+      width: 40,
+      height: 40,
+      borderRadius: 20,
+      margin: 2
+    },
+    color4:{
+      flexDirection: 'row',
+      backgroundColor: '#B9C6AE',
+      width: 40,
+      height: 40,
+      borderRadius: 20,
+      margin: 2
+    },
+    button: {
+      flexDirection: 'column',
+      backgroundColor: "#757083", 
+      width: "88%",
+      borderRadius: 10,
+    },
 
-});
+    buttontext: {
+      fontSize: 16,
+      fontWeight: "bold",
+      color: 'white',
+      textAlign: "center",
+      padding: 20
+    }
+
+    });
