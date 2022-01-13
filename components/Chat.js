@@ -1,9 +1,11 @@
  
 import React from 'react';
 import { View, Text, StyleSheet, Platform, KeyboardAvoidingView, LogBox } from 'react-native';
-import { GiftedChat, Bubble, Day } from 'react-native-gifted-chat';
+import { GiftedChat, Bubble, InputToolbar } from 'react-native-gifted-chat';
 import * as firebase from 'firebase';
 import "firebase/firestore";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import NetInfo from '@react-native-community/netinfo';
 
 
 export default class Chat extends React.Component {
@@ -17,6 +19,7 @@ export default class Chat extends React.Component {
                 name: "",
                 avatar: "",
             },
+            isConnected: false, 
         };
     
         //initializing firebase
@@ -43,21 +46,32 @@ export default class Chat extends React.Component {
         // ]);
     
     }
-    
-    
     componentDidMount() {
         // Set the page title once Chat is loaded
         let { name } = this.props.route.params
         // Adds the name to top of screen
         this.props.navigation.setOptions({ title: name })
     
+        //To find out user's connection status
+     NetInfo.fetch().then(connection => {
+        //actions when user is online
+        if (connection.isConnected) {
+            this.setState({ isConnected: true });
+            console.log('online');
+
         // user can sign in anonymously
-        this.authUnsubscribe = firebase.auth().onAuthStateChanged(async (user) => {
-            if (!user) {
+            this.authUnsubscribe = firebase.auth().onAuthStateChanged(async (user) => {
+                if (!user) {
                 await firebase.auth().signInAnonymously();
             }
+
+        // listens for updates in the collection
+            this.unSubscribe = this.referenceChatMessages
+                .orderBy("createdAt", "desc")
+                .onSnapshot(this.onCollectionUpdate);
+    
         
-            //update user state with currently active user data
+        //update user state with currently active user data
             this.setState({
                 uid: user.uid,
                 messages: [],
@@ -67,15 +81,36 @@ export default class Chat extends React.Component {
                     avatar: "https://placeimg.com/140/140/any",
                 },
             });
-            // listens for updates in the collection
-            this.unsubscribe = this.referenceChatMessages
-                .orderBy("createdAt", "desc")
-                .onSnapshot(this.onCollectionUpdate)
+
         });
+            //save messages when online
+            this.saveMessages();
+            } else {
+                this.setState({ isConnected: false });
+                console.log('offline');
+
+            //retrieve chat from asyncstorage
+            this.getMessages();
+            }   
+        });
+    }   
     
-    }
-    
-    
+            //unsubscribe from collection updates
+            componentWillUnmount() {
+                this.authUnsubscribe();
+                this.unSubscribe();
+            }
+
+            // calback function for when user sends a message
+            onSend(messages = []) {
+                this.setState(previousState => ({
+                    messages: GiftedChat.append(previousState.messages, messages),
+                }), () => {
+                    this.addMessages();
+                    this.saveMessages();
+                });
+            }
+
     // when updated set the messages state with the current data 
     onCollectionUpdate = (querySnapshot) => { 
         const messages = [];
@@ -94,12 +129,6 @@ export default class Chat extends React.Component {
             messages: messages
         });
     };
-
-    //unsubscribe from collection updates
-    componentWillUnmount() {
-        this.authUnsubscribe();
-        this.unsubscribe();
-    }
     
     // Add messages to database
     addMessages() { 
@@ -112,16 +141,38 @@ export default class Chat extends React.Component {
             user: this.state.user
         });
     }
-    
-    
-    // calback function for when user sends a message
-    onSend(messages = []) {
-        this.setState(previousState => ({
-            messages: GiftedChat.append(previousState.messages, messages),
-        }), () => {
-            this.addMessages();
-        })
+    getMessages = async () =>{
+        let messages = '';
+        try {
+            //wait until asyncStorage promise settles
+            messages = await AsyncStorage.getItem('messages') || [];//set empty if there is no storage item
+            this.setState({
+                messages: JSON.parse(messages)//convert the saved string back into an object
+            });
+        } catch (error) {
+            console.log(error.message);
+        }
     }
+        //save newly added messages to state.messgaes
+      saveMessages = async () => {
+        try {
+          await AsyncStorage.setItem('messages', JSON.stringify(this.state.messages));
+          }catch (error) {
+          console.log(error.message);
+          }
+      }
+  
+      deleteMessages = async () => {
+        try {
+          await AsyncStorage.removeItem('messages');
+          this.setState({
+            messages: []
+          })
+        } catch (error) {
+          console.log(error.message);
+        }
+      } 
+    
     
     renderBubble(props) {
         return (
@@ -136,7 +187,17 @@ export default class Chat extends React.Component {
             />
         )
     }
-
+    //render InputToolbar only when online
+    renderInputToolbar(props) {
+        if (this.state.isConnected == false) {
+        } else {
+            return(
+                <InputToolbar
+                {...props}
+                />
+            );
+        }
+    }
     //change color for day in system message
     // renderDay(props) {
     //     return <Day {...props} textStyle={{ color: "#fff" }} />;
@@ -156,6 +217,8 @@ export default class Chat extends React.Component {
                     // renderDay={this.renderDay}
                     messages={this.state.messages}
                     onSend={messages => this.onSend(messages)}
+                    renderBubble={this.renderBubble}
+                    renderInputToolbar={this.renderInputToolbar.bind(this)}
                     user={{
                         _id: this.state.user._id,
                         name: this.state.name,
