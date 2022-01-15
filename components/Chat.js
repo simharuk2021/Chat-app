@@ -6,6 +6,8 @@ import * as firebase from 'firebase';
 import "firebase/firestore";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import NetInfo from '@react-native-community/netinfo';
+import CustomActions from './CustomActions';
+import MapView from 'react-native-maps';
 
 
 export default class Chat extends React.Component {
@@ -20,6 +22,8 @@ export default class Chat extends React.Component {
                 avatar: "",
             },
             isConnected: false, 
+            image: null,
+            location: null
         };
     
         //initializing firebase
@@ -111,20 +115,26 @@ export default class Chat extends React.Component {
                 });
             }
 
-    // when updated set the messages state with the current data 
-    onCollectionUpdate = (querySnapshot) => { 
-        const messages = [];
-        // go through each document
-        querySnapshot.forEach((doc) => {
-            // get the QueryDocumentSnapshot's data
-            let data = doc.data();
-            messages.push({
-                _id: data._id,
-                text: data.text,
-                createdAt: data.createdAt.toDate(),
-                user: data.user
-            });
-        });
+            // when updated set the messages state with the current data 
+            onCollectionUpdate = (querySnapshot) => { 
+                const messages = [];
+                // go through each document
+                querySnapshot.forEach((doc) => {
+                    // get the QueryDocumentSnapshot's data
+                    let data = doc.data();
+                    messages.push({
+                        _id: data._id,
+                        text: data.text,
+                        createdAt: data.createdAt.toDate(),
+                        user: {
+                            _id: data.user._id,
+                            name: data.user.name,
+                            avatar: data.user.avatar
+                        },
+                        image: data.image || null,
+                        location: data.location || null,
+                    });
+                });
         this.setState({
             messages: messages
         });
@@ -138,7 +148,9 @@ export default class Chat extends React.Component {
             _id: message._id,
             text: message.text || "",
             createdAt: message.createdAt,
-            user: this.state.user
+            user: this.state.user,
+            image: message.image || "",
+            location: message.location || null,
         });
     }
     getMessages = async () =>{
@@ -174,34 +186,56 @@ export default class Chat extends React.Component {
       } 
     
     
-    renderBubble(props) {
-        return (
-            <Bubble
-                {...props}
-                wrapperStyle={{
-                    right: {
-                        backgroundColor: '#000',
-                        opacity: 0.75
-                    },
-                }}
-            />
-        )
-    }
-    //render InputToolbar only when online
-    renderInputToolbar(props) {
-        if (this.state.isConnected == false) {
-        } else {
-            return(
-                <InputToolbar
-                {...props}
+        renderBubble(props) {
+            return (
+                <Bubble
+                    {...props}
+                    wrapperStyle={{
+                        right: {
+                            backgroundColor: '#000',
+                            opacity: 0.75
+                        },
+                    }}
+                />
+            )
+        }
+        //render InputToolbar only when online
+        renderInputToolbar(props) {
+            if (this.state.isConnected == false) {
+            } else {
+                return(
+                    <InputToolbar
+                    {...props}
+                    />
+                );
+            }
+        }
+            //to access CustomActions
+            renderCustomActions = (props) => {
+                return <CustomActions {...props} />;
+            };
+            
+            //return a MapView when surrentMessage contains location data
+    renderCustomView (props) {
+        const { currentMessage} = props;
+        if (currentMessage.location) {
+            return (
+                <MapView
+                    style={{width: 150,
+                    height: 100,
+                    borderRadius: 13,
+                    margin: 3}}
+                    region={{
+                    latitude: currentMessage.location.latitude,
+                    longitude: currentMessage.location.longitude,
+                    latitudeDelta: 0.0922,
+                    longitudeDelta: 0.0421,
+                    }}
                 />
             );
         }
+        return null;
     }
-    //change color for day in system message
-    // renderDay(props) {
-    //     return <Day {...props} textStyle={{ color: "#fff" }} />;
-    // }
 
     render() {
         // Set the background color selected from start screen
@@ -214,11 +248,12 @@ export default class Chat extends React.Component {
                 backgroundColor: bgColor ? bgColor : "#fff",}}>
                 <View style={styles.giftedChat}>
                 <GiftedChat
-                    // renderDay={this.renderDay}
                     messages={this.state.messages}
                     onSend={messages => this.onSend(messages)}
                     renderBubble={this.renderBubble}
                     renderInputToolbar={this.renderInputToolbar.bind(this)}
+                    renderActions={this.renderCustomActions}
+                    renderCustomView={this.renderCustomView}
                     user={{
                         _id: this.state.user._id,
                         name: this.state.name,

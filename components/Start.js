@@ -180,29 +180,30 @@ const styles = StyleSheet.create({
       resizeMode: "contain",
       flex: 1,
    },
-    box: {
-      height: "44%",
-      width: "88%",
-      marginBottom: 30,
-      backgroundColor: "white",
-      flexGrow: 1,
-      flexShrink: 0,
-      flexDirection: "column",
-      justifyContent: "space-evenly",
-      alignItems: "center",
-      paddingTop: 15,
-      paddingBottom: 15,
-      borderRadius: 10,
-      height: 100,
-      minHeight: 260,
-      maxHeight: 300,
-  },
+   box: {
+    marginBottom: 30,
+    // backgroundColor: "white",
+    flexGrow: 1,
+    flexShrink: 0,
+    flexDirection: "column",
+    justifyContent: "space-evenly",
+    alignItems: "center",
+    paddingTop: 15,
+    paddingBottom: 15,
+    borderRadius: 10,
+    height: 260,
+    minHeight: 260,
+    maxHeight: 300,
+    height: "44%",
+    width: "88%"
+},
 
     inputBox: {
       flexDirection: 'row',
       width:"88%",
       height: 50,
       borderColor: '#757083', 
+      backgroundColor: "white",
       borderWidth: 1,
       padding: 10
     },
@@ -217,7 +218,7 @@ const styles = StyleSheet.create({
       fontSize: 16,
       fontWeight: "300",
       color: '#757083',
-      opacity: 0.5
+      opacity: 0.8
     },
 
     colorBox:{
